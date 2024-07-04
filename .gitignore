@@ -1,0 +1,57 @@
+# This .gitignore file should be placed at the root of your Unity project directory
+
+# Unity generated files
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+
+# Unity3D generated meta files
+*.pidb.meta
+*.pdb.meta
+
+# Unity3D Generated File On Crash Reports
+sysinfo.txt
+
+# Builds
+*.apk
+*.unitypackage
+
+# Crashlytics generated file
+crashlytics-build.properties
+
+# Visual Studio / Rider
+.vs/
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store*
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# User-specific files
+*.csproj
+*.sln
+*.user
+*.userprefs
+*.pidb
+*.booproj
+
+# Mono Auto Generated Files
+mono_crash.*
+
+# Mac OS X
+*.swp
+*.lock
+*.swp
+*.lock
+
+# Windows Image File Execution Options (IFEO)
+*.ini

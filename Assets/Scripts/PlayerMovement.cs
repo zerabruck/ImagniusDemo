@@ -19,7 +19,24 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField]private LayerMask groundLayer;
     [SerializeField]private LayerMask ropeLayer;
+  public float gravity = 9.8f; // Standard gravity
 
+
+
+    void FixedUpdate()
+    {
+        // Example condition to check if the object is upside down
+        if (transform.up.y < 0)
+        {
+            // Apply custom gravity upwards
+            rigidbody.AddForce(Vector2.up * gravity);
+        }
+        else
+        {
+            // Apply custom gravity downwards
+            rigidbody.AddForce(Vector2.down * gravity);
+        }
+    }
 
     
     private void Awake() {
@@ -28,7 +45,12 @@ public class PlayerMovement : MonoBehaviour
         boxCollider = GetComponent<BoxCollider2D>();
         currentDoubleJumpCollDown = 0;
     }
+    private void Start() {
+        rigidbody.gravityScale = -1;
+        
+    }
     private void Update() {
+        FixedUpdate();
         if (isGrounded()){
             currentDoubleJumpCollDown = 0;
         }
