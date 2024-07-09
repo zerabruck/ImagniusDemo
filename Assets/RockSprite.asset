@@ -13,24 +13,11 @@ MonoBehaviour:
   m_Name: RockSprite
   m_EditorClassIdentifier: 
   m_Angles:
-  - m_Start: 71
-    m_End: 263
+  - m_Start: -49
+    m_End: 41
     m_Order: 0
     m_Sprites: []
-  - m_Start: 8
-    m_End: 71
-    m_Order: 0
-    m_Sprites: []
-  - m_Start: -55
-    m_End: 8
-    m_Order: 0
-    m_Sprites:
-    - {fileID: 0}
-  - m_Start: -97
-    m_End: -55
-    m_Order: 0
-    m_Sprites: []
-  m_FillTexture: {fileID: 2800000, guid: ea58fdd1a68a33d4d903d615b05cd92e, type: 3}
+  m_FillTexture: {fileID: 2800000, guid: 2ab2dcd93cbe4fc42b5892c5af285f28, type: 3}
   m_CornerSprites:
   - m_CornerType: 0
     m_Sprites:

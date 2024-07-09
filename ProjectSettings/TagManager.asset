@@ -18,9 +18,9 @@ TagManager:
   - Player
   - Ground
   - Rope
-  - 
-  - 
-  - 
+  - Rock
+  - Grass
+  - Cursor
   - 
   - 
   - 
@@ -56,4 +56,7 @@ TagManager:
     locked: 0
   - name: Rope
     uniqueID: 2503855147
+    locked: 0
+  - name: Cursor
+    uniqueID: 1804252251
     locked: 0
