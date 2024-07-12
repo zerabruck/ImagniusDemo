@@ -27,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
     private float verticalPress;
     private float ropeCollDown = 0.5f;
     private float currentCollDown;
+    private string isRockMoving = "idle";
     private GameObject selectedObject = null;
 
 
@@ -44,41 +45,51 @@ public class PlayerMovement : MonoBehaviour
         playerHealth = GetComponent<PlayerHealth>();
         currentDoubleJumpCollDown = 0;
     }
-    private void MoveRock(){
-        if (selectedObject != null)
-        {
-                SpriteRenderer spriteRenderer = selectedObject.GetComponent<SpriteRenderer>();
-                if (spriteRenderer != null) {
-        spriteRenderer.color = Color.green;
+public void MoveRock() {
+    if (selectedObject != null && (isRockMoving == "idle" || isRockMoving == "stop") && playerHealth.currentMana > 0) {
+        isRockMoving = "moving";
+    } else{
+        
+        isRockMoving = "stop";
+    
     }
-
-            if (Input.GetMouseButton(1) && playerHealth.currentMana > 0)
-            {
-                playerHealth.ManaDamage(Time.deltaTime * 10);
-                animator.SetBool("levitation", true);
-                Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                selectedObject.transform.position = mousePosition;
-            }
-            else if (Input.GetMouseButtonUp(1) || playerHealth.currentMana == 0)
-            {
-                animator.SetBool("levitation", false);
-                spriteRenderer.color = Color.white;
-                selectedObject = null;
-            }
-        }
-
-    }
+}
 
     private void Update()
     {
+        
         RockInsight();
-        if(!Input.GetMouseButton(1)){
-            playerHealth.ManaHeal(Time.deltaTime * 10);
+        if (selectedObject != null){
+        SpriteRenderer spriteRenderer = selectedObject.GetComponent<SpriteRenderer>();
+        Debug.Log(selectedObject);
+        spriteRenderer.color = Color.green;
+
         }
-        if(selectedObject){
+        Debug.Log(isRockMoving);
+        if (playerHealth.currentMana == 0 ){
             MoveRock();
         }
-        if ((isGrounded() || rockContact()))
+        if(isRockMoving == "stop"){
+            playerHealth.ManaHeal(Time.deltaTime * 10);
+            animator.SetBool("levitation", false);
+            if(selectedObject != null){
+                SpriteRenderer spriteRenderer = selectedObject.GetComponent<SpriteRenderer>();
+                spriteRenderer.color = Color.white;
+            }
+            selectedObject = null;
+        }
+        if(isRockMoving == "moving"){
+            playerHealth.ManaDamage(Time.deltaTime * 10);
+            Rigidbody2D selectedRigidbody = selectedObject.GetComponent<Rigidbody2D>();
+            Vector2 joystickPosition = movementJoystick.Direction;
+            animator.SetBool("levitation", true);
+            selectedRigidbody.velocity = new Vector2(joystickPosition.x * 5, joystickPosition.y * 5);
+
+        }
+        // if(selectedObject){
+        //     MoveRock();
+        // }
+        if (isGrounded() || rockContact())
         {
             currentDoubleJumpCollDown = 0;
         }
@@ -88,18 +99,18 @@ public class PlayerMovement : MonoBehaviour
         }
         currentCollDown += Time.deltaTime;
         horizontalPress = movementJoystick.Direction.x;
-        if (!ropeContact())
+        if (!ropeContact() && isRockMoving != "moving")
         {
             if (horizontalPress > 0)
             {
-                transform.localScale = new Vector2(1f, transform.localScale.y);
+                transform.localScale = new Vector2(5f, transform.localScale.y);
             }
             else if (horizontalPress < 0)
             {
-                transform.localScale = new Vector2(-1f, transform.localScale.y);
+                transform.localScale = new Vector2(-5f, transform.localScale.y);
             }
             rigidbody.velocity = new Vector2(horizontalPress * speed, rigidbody.velocity.y);
-            if ((isGrounded() || rockContact()))
+            if (isGrounded() || rockContact())
             {
                 animator.SetBool("runing", horizontalPress != 0);
             }
@@ -121,36 +132,35 @@ public class PlayerMovement : MonoBehaviour
         if (ropeContact())
         {
             currentCollDown += Time.deltaTime;
-            Debug.Log("Rope contact");
             rigidbody.gravityScale = 0;
             animator.SetBool("runing", false);
             animator.SetBool("climbIdle", true);
-            verticalPress = Input.GetAxis("Vertical");
+            verticalPress = movementJoystick.Direction.y;
             if (verticalPress > 0)
             {
-                animator.SetBool("climbIdle", false);
+                animator.SetBool("climbIdle", false);  
                 animator.SetBool("climb", true);
-                rigidbody.velocity = new Vector2(rigidbody.velocity.x, verticalPress * speed);
+                rigidbody.velocity = new Vector2(rigidbody.velocity.x, verticalPress * 5);
             }
-            else if (verticalPress < 0)
+            else if (verticalPress < 0 )
             {
                 animator.SetBool("climbIdle", false);
                 animator.SetBool("climb", true);
-                rigidbody.velocity = new Vector2(rigidbody.velocity.x, verticalPress * speed);
+                rigidbody.velocity = new Vector2(rigidbody.velocity.x, verticalPress * 5);
             }
             else
             {
-                rigidbody.velocity = new Vector2(rigidbody.velocity.x, 0);
+                // rigidbody.velocity = new Vector2(rigidbody.velocity.x, 0);
                 animator.SetBool("climb", false);
 
             }
             if (horizontalPress > 0 && currentCollDown > ropeCollDown && !Input.GetKey(KeyCode.Space))
             {
-                transform.localScale = new Vector2(-1f, transform.localScale.y);
+                transform.localScale = new Vector2(-5f, transform.localScale.y);
             }
             else if (horizontalPress < 0 && currentCollDown > ropeCollDown && !Input.GetKey(KeyCode.Space))
             {
-                transform.localScale = new Vector2(1f, transform.localScale.y);
+                transform.localScale = new Vector2(5f, transform.localScale.y);
             }
 
         }
@@ -162,11 +172,11 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("climbIdle", false);
 
         }
-        animator.SetBool("grounded", (isGrounded() || rockContact()));
+        animator.SetBool("grounded", isGrounded());
 
 
     }
-    private void jump()
+    public void jump()
     {
         currentDoubleJumpCollDown += 1;
         if (ropeContact())
@@ -175,15 +185,18 @@ public class PlayerMovement : MonoBehaviour
             {
                 animator.SetTrigger("jump");
                 // transform.localScale = new Vector2(-1 * transform.localScale.x, transform.localScale.y);
-                rigidbody.velocity = new Vector2(-1 * transform.localScale.x * 3, rigidbody.velocity.y + 5);
+            Debug.Log(horizontalPress);
+            Debug.Log("velocity x Press: " + rigidbody.velocity.x);
+            Debug.Log("velocity y Press: " + rigidbody.velocity.y);
+
+                rigidbody.velocity = new Vector2( -Mathf.Sign(transform.localScale.x) * 500, rigidbody.velocity.y + 5);
             }
 
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !ropeContact())
         {
             if (currentDoubleJumpCollDown == 2)
             {
-                Debug.Log("Double Jump");
                 animator.SetTrigger("doubleJump");
             }
             if (currentDoubleJumpCollDown == 1)
@@ -193,6 +206,10 @@ public class PlayerMovement : MonoBehaviour
             rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpForce);
 
         }
+
+    }
+    public void ScreenJump(){
+        rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpForce);
 
     }
 
@@ -233,7 +250,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(attackCollider.bounds.center + transform.right * range * transform.localScale.x * colliderDistance, new Vector2(attackCollider.bounds.size.x * range, attackCollider.bounds.size.y));
+        Gizmos.DrawWireCube(attackCollider.bounds.center + colliderDistance * range * transform.localScale.x * transform.right, new Vector2(attackCollider.bounds.size.x * range, attackCollider.bounds.size.y));
 
     }
 }

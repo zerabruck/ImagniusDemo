@@ -265,6 +265,32 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -314,8 +340,8 @@ TextureImporter:
       name: Sprite4_2
       rect:
         serializedVersion: 2
-        x: 1020
-        y: 4004
+        x: 1012
+        y: 3996
         width: 377
         height: 226
       alignment: 0
@@ -782,7 +808,7 @@ TextureImporter:
         height: 213
       alignment: 9
       pivot: {x: 0.5428792, y: 0.20884076}
-      border: {x: 121, y: 0, z: 128, w: 0}
+      border: {x: 70, y: 0, z: 72, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -1343,13 +1369,13 @@ TextureImporter:
       name: Sprite4_51
       rect:
         serializedVersion: 2
-        x: 1345
+        x: 1355
         y: 3373
-        width: 668
+        width: 541
         height: 124
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 52, y: 0, z: 46, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
